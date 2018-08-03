@@ -1,0 +1,25 @@
+[package]
+name = "knock"
+version = "0.1.0"
+authors = ["Ewerton Carlos Assis <earaujoassis@gmail.com>"]
+description = "Knock-knock is a really tiny dynamic DNS (DDNS) client"
+repository = "https://github.com/earaujoassis/knock-knock"
+readme = "README.md"
+categories = ["network-programming", "DDNS"]
+license = "MIT"
+
+[dependencies]
+rocket = "0.3.15"
+rocket_codegen = "0.3.15"
+serde = "1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+
+[dependencies.rocket_contrib]
+version = "*"
+default-features = false
+features = ["json"]
+
+[[bin]]
+name = "knock"
+path = "src/main.rs"
