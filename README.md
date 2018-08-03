@@ -1,6 +1,6 @@
 # Knock-knock
 
-> Knock-knock is a really tiny dynamic DNS (DDNS) client
+> Knock-knock is a really tiny dynamic DNS (DDNS) server
 
 Knock-knock is based on the PowerDNS Remote Backend: it makes available a backend HTTP server
 to provide queries answers to the DNS server; and a HTTP server to attend dynamic DNS (DDNS) clients.
