@@ -1,0 +1,23 @@
+[development]
+address = "0.0.0.0"
+port = 8000
+workers = 4
+log = "debug"
+secret_key = ""
+limits = { forms = 32768 }
+
+[staging]
+address = "0.0.0.0"
+port = 80
+workers = 8
+log = "normal"
+secret_key = ""
+limits = { forms = 32768 }
+
+[production]
+address = "0.0.0.0"
+port = 80
+workers = 8
+log = "critical"
+secret_key = ""
+limits = { forms = 32768 }

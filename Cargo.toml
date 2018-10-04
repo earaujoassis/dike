@@ -9,11 +9,11 @@ categories = ["network-programming", "DDNS"]
 license = "MIT"
 
 [dependencies]
-rocket = "0.3.15"
-rocket_codegen = "0.3.15"
-serde = "1.0"
-serde_json = "1.0"
-serde_derive = "1.0"
+rocket = "0.3.17"
+rocket_codegen = "0.3.17"
+serde = "1.0.79"
+serde_json = "1.0.32"
+serde_derive = "1.0.79"
 
 [dependencies.rocket_contrib]
 version = "*"

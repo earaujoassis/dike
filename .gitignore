@@ -2,3 +2,7 @@
 
 /target/
 **/*.rs.bk
+*.env*
+!.env.sample
+*Rocket.toml*
+!Rocket.toml.sample
