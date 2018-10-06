@@ -1,4 +1,4 @@
-FROM rustlang/rust:nightly
+FROM rust:1.30.0
 MAINTAINER Ewerton Carlos Assis <earaujoassis@gmail.com>
 
 ARG ROCKET_ENV=production
@@ -16,5 +16,5 @@ COPY . .
 RUN cargo install diesel_cli --no-default-features --features mysql
 RUN cargo install --path .
 
-EXPOSE 8000
+EXPOSE 80
 CMD ./scripts/wait-for-datastore.sh datastore && ./scripts/start-knocking.sh

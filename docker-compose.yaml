@@ -1,34 +1,32 @@
 version: '3.4'
 services:
-  knock_knock:
-    build:
-      context: .
-      args:
-        ROCKET_ENV: $ROCKET_ENV
-        ENV: $ENV
-    container_name: 'knock_knock'
-    image: 'knock_knock'
-    ports:
-      - "8000:8000"
-    env_file: .env
-    volumes:
-      - ./:/app
-    depends_on:
-      - "datastore"
-
-  datastore:
+  knock-mariadb:
     image: 'mariadb:10.3'
-    container_name: 'datastore'
+    container_name: knock-mariadb
+    hostname: knock-mariadb
     ports:
         - "3306:3306"
     volumes:
-      - datastore_volume:/var/lib/mysql
+      - knock-mariadb-data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=knock_knock_development
-      - MYSQL_USER=datastore_user
+      - MYSQL_ROOT_PASSWORD=aqivMN1WqCjIORXI
+      - MYSQL_DATABASE=knock_development
+      - MYSQL_USER=knock-mariadb
       - MYSQL_PASSWORD=9GFRsVIr5L7ORVPy
-      - VIRTUAL_HOST=datastore_host
+
+  knock-knock:
+    build:
+      context: .
+      args:
+        ROCKET_ENV: development
+        ENV: development
+    image: knock-knock
+    container_name: knock-knock
+    ports:
+      - "8000:80"
+    env_file: .env
+    depends_on:
+      - knock-mariadb
 
 volumes:
-  datastore_volume:
+  knock-mariadb-data:
