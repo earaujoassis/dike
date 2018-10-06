@@ -13,20 +13,22 @@ services:
     env_file: .env
     volumes:
       - ./:/app
+    depends_on:
+      - "datastore"
 
-  knock_knock_datastore:
+  datastore:
     image: 'mariadb:10.3'
-    container_name: 'knock_knock_datastore'
+    container_name: 'datastore'
     ports:
         - "3306:3306"
     volumes:
-      - knock_knock_data:/var/lib/mysql
+      - datastore_volume:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=knock_knock_development
-      - MYSQL_USER=knock_knock_datastore_user
+      - MYSQL_USER=datastore_user
       - MYSQL_PASSWORD=9GFRsVIr5L7ORVPy
-      - VIRTUAL_HOST=knock_knock_datastore
+      - VIRTUAL_HOST=datastore_host
 
 volumes:
-  knock_knock_data:
+  datastore_volume:
