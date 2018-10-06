@@ -1,4 +1,4 @@
-use data::Client;
+use super::data::Client;
 #[allow(unused)]
 use rocket_contrib::{Json, Value};
 
