@@ -15,7 +15,7 @@ Rust and setting up Cargo, you may run:
 
 ```sh
 $ cargo install diesel_cli --no-default-features --features mysql
-$ diesel migration run
+$ diesel migration run --database-url=?
 $ cargo run
 ```
 
@@ -24,7 +24,8 @@ It will compile the binary and run it. The HTTP server's address will be printed
 Another possibility is using `docker-compose` to start all services (including database):
 
 ```sh
-$ docker-compose up --build
+$ docker-compose build
+$ docker-compose up
 ```
 
 ## Issues

@@ -1,5 +1,4 @@
-#[allow(unused)]
-use rocket_contrib::{Json, Value};
+import_controller_generic_requeriments!();
 
 /*
  * This method is used to do the basic query. It can omit auth, but if PowerDNS is using DNSSEC this can
@@ -21,9 +20,8 @@ use rocket_contrib::{Json, Value};
         "result": [{"qtype": "A", "qname": "www.example.com", "content": "203.0.113.2", "ttl": 60}]
     }
  */
-#[get("/lookup/<domain>/<qtype>")]
-pub fn dns_lookup(domain: String, qtype: String) -> &'static str {
-    "Mockup"
+pub fn dns_lookup(_: &mut Request) -> IronResult<Response> {
+    response_ok_text("Mockup")
 }
 
 /*
@@ -47,9 +45,8 @@ pub fn dns_lookup(domain: String, qtype: String) -> &'static str {
         ]
     }
  */
-#[get("/list/<domain_id>/<domain>")]
-pub fn dns_list(domain_id: i32, domain: String) -> &'static str {
-    "Mockup"
+pub fn dns_list(_: &mut Request) -> IronResult<Response> {
+    response_ok_text("Mockup")
 }
 
 /*
@@ -69,9 +66,8 @@ pub fn dns_list(domain_id: i32, domain: String) -> &'static str {
     }
  * Response example: {"result": true}
  */
-#[get("/adddomainkey/<domain>/<domain_id>")]
-pub fn dns_add_domain_key(domain: String, domain_id: i32) -> &'static str {
-    "Mockup"
+pub fn dns_add_domain_key(_: &mut Request) -> IronResult<Response> {
+    response_ok_text("Mockup")
 }
 
 /*
@@ -91,7 +87,6 @@ pub fn dns_add_domain_key(domain: String, domain_id: i32) -> &'static str {
         ]
     }
  */
-#[get("/getdomainkeys/<domain>/<domain_id>")]
-pub fn dns_get_domain_keys(domain: String, domain_id: i32) -> &'static str {
-    "Mockup"
+pub fn dns_get_domain_keys(_: &mut Request) -> IronResult<Response> {
+    response_ok_text("Mockup")
 }
