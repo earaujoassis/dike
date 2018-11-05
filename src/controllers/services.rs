@@ -1,16 +1,15 @@
 import_controller_generic_requeriments!();
 
-use datastore::models::client::*;
-
-pub fn ping(_: &mut Request) -> IronResult<Response> {
-    response_ok_text("pong")
+pub fn index(_req: &HttpRequest) -> HttpResponse {
+    response_ok_text("You shall not pass!")
 }
 
-pub fn clients(req: &mut Request) -> IronResult<Response> {
+pub fn clients(req: &HttpRequest) -> HttpResponse {
     let connection = req.get_db_conn();
     let logger = req.get_logger();
+    response_ok(json!({"clients": client::Client::active_clients(&connection, &logger)}))
+}
 
-    let clients = Client::active_clients(&connection, &logger);
-
-    response_ok(&json!({"clients": clients}))
+pub fn ping(_req: &HttpRequest) -> HttpResponse {
+    response_ok_text("pong")
 }

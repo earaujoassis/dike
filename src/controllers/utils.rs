@@ -1,36 +1,39 @@
 #[allow(unused_macros)]
 macro_rules! import_controller_generic_requeriments {
     ($($includes:ident),*) => {
-        use iron::prelude::*;
-        #[allow(unused_imports)]
-        use router::Router;
-
-        #[allow(unused_imports)]
-        use datastore::*;
-        #[allow(unused_imports)]
-        use middlewares::DieselReqExt;
-        #[allow(unused_imports)]
-        use middlewares::LoggerReqExt;
-
-        $(
-            use $includes;
-        )*
-
         #[allow(unused_imports)]
         use std::error::Error;
         #[allow(unused_imports)]
         use std::io::Read;
-        use controllers::utils::*;
-        #[allow(unused_imports)]
-        use utils::macros;
-
-
         #[allow(unused_imports)]
         use serde_json;
+        #[allow(unused_imports)]
+        use serde_json::Value;
         #[allow(unused_imports)]
         use serde_json::Value::Object;
         #[allow(unused_imports)]
         use serde_json::Map;
+        #[allow(unused_imports)]
+        use actix_web::{HttpRequest, HttpResponse};
+        #[allow(unused_imports)]
+        use actix_web::http::StatusCode;
+
+        #[allow(unused_imports)]
+        use middlewares::DieselReqExt;
+        #[allow(unused_imports)]
+        use middlewares::LoggerReqExt;
+        #[allow(unused_imports)]
+        use datastore::*;
+        #[allow(unused_imports)]
+        use datastore::models;
+        #[allow(unused_imports)]
+        use controllers::utils::*;
+        #[allow(unused_imports)]
+        use utils::macros;
+
+        $(
+            use $includes;
+        )*
     }
 }
 
@@ -38,30 +41,26 @@ macro_rules! import_controller_generic_requeriments {
 macro_rules! create_http_response {
     ($name:ident, $status:expr, "to_json_error") => {
         #[allow(dead_code)]
-        pub fn $name<S: Into<String>>(text: S) -> IronResult<Response> {
-            return Ok(Response::with((
-                $status,
-                json!({"error": text.into()}).to_string()
-            )));
+        pub fn $name<S: Into<String>>(text: S) -> HttpResponse {
+            return HttpResponse::Ok()
+                .status($status)
+                .json(json!({"error": text.into()}));
         }
     };
     ($name:ident, $status:expr, "to_json") => {
         #[allow(dead_code)]
-        pub fn $name<S: Serialize>(response: &S) -> IronResult<Response> {
-            let json_text = serde_json::to_string(response).unwrap();
-            return Ok(Response::with((
-                $status,
-                json_text
-            )));
+        pub fn $name(response: Value) -> HttpResponse {
+            return HttpResponse::Ok()
+                .status($status)
+                .json(response);
         }
     };
     ($name:ident, $status:expr, "text") => {
         #[allow(dead_code)]
-        pub fn $name<S: Into<String>>(text: S) -> IronResult<Response> {
-            return Ok(Response::with((
-                $status,
-                text.into()
-            )));
+        pub fn $name<S: Into<String>>(text: S) -> HttpResponse {
+            return HttpResponse::Ok()
+                .status($status)
+                .body(text.into());
         }
     };
 }
@@ -71,7 +70,6 @@ macro_rules! get_body_as {
     ($structure:ty, $req:expr, $error_fn:ident) => {
         {
             let body = get_body!($req, $error_fn);
-
             let structure = serde_json::from_str::<$structure>(&body);
 
             match structure {
@@ -87,7 +85,6 @@ macro_rules! get_body {
     ($req:expr, $error_fn:ident) => {
         {
             let mut payload = String::new();
-
             if let Err(_) = $req.body.read_to_string(&mut payload) {
                 return $error_fn("Request body not found")
             }
@@ -139,24 +136,24 @@ macro_rules! filter_struct_values_for_json {
     }
 }
 
-use iron::status;
-use iron::prelude::*;
-use serde::ser::Serialize;
+#[allow(unused_imports)]
+use actix_web::http::StatusCode;
+#[allow(unused_imports)]
+use actix_web::{HttpRequest, HttpResponse};
+#[allow(unused_imports)]
 use serde_json;
-use iron::status::Status;
-
+#[allow(unused_imports)]
+use serde_json::Value;
 
 #[allow(dead_code)]
-pub fn response_text<S: Into<String>>(text: S, status:Status) -> IronResult<Response> {
-    return Ok(Response::with((
-        status,
-        text.into()
-    )));
+pub fn response_text<S: Into<String>>(text: S, status:StatusCode) -> HttpResponse {
+    return HttpResponse::Ok()
+        .status(status)
+        .body(text.into());
 }
 
-create_http_response!(response_ok, status::Ok, "to_json");
-create_http_response!(response_ok_text, status::Ok, "text");
-
-create_http_response!(response_not_found, status::NotFound, "to_json_error");
-create_http_response!(response_bad_request, status::BadRequest, "to_json_error");
-create_http_response!(response_internal_server_error, status::InternalServerError, "to_json_error");
+create_http_response!(response_ok, StatusCode::OK, "to_json");
+create_http_response!(response_ok_text, StatusCode::OK, "text");
+create_http_response!(response_not_found, StatusCode::NOT_FOUND, "to_json_error");
+create_http_response!(response_bad_request, StatusCode::BAD_REQUEST, "to_json_error");
+create_http_response!(response_internal_server_error, StatusCode::INTERNAL_SERVER_ERROR, "to_json_error");

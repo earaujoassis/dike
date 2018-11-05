@@ -20,7 +20,7 @@ import_controller_generic_requeriments!();
         "result": [{"qtype": "A", "qname": "www.example.com", "content": "203.0.113.2", "ttl": 60}]
     }
  */
-pub fn dns_lookup(_: &mut Request) -> IronResult<Response> {
+pub fn dns_lookup(_req: &HttpRequest) -> HttpResponse {
     response_ok_text("Mockup")
 }
 
@@ -45,7 +45,7 @@ pub fn dns_lookup(_: &mut Request) -> IronResult<Response> {
         ]
     }
  */
-pub fn dns_list(_: &mut Request) -> IronResult<Response> {
+pub fn dns_list(_req: &HttpRequest) -> HttpResponse {
     response_ok_text("Mockup")
 }
 
@@ -66,7 +66,7 @@ pub fn dns_list(_: &mut Request) -> IronResult<Response> {
     }
  * Response example: {"result": true}
  */
-pub fn dns_add_domain_key(_: &mut Request) -> IronResult<Response> {
+pub fn dns_add_domain_key(_req: &HttpRequest) -> HttpResponse {
     response_ok_text("Mockup")
 }
 
@@ -87,6 +87,6 @@ pub fn dns_add_domain_key(_: &mut Request) -> IronResult<Response> {
         ]
     }
  */
-pub fn dns_get_domain_keys(_: &mut Request) -> IronResult<Response> {
+pub fn dns_get_domain_keys(_req: &HttpRequest) -> HttpResponse {
     response_ok_text("Mockup")
 }
