@@ -1,8 +1,7 @@
 use std::env;
 use slog::*;
-
-use iron::{typemap, BeforeMiddleware};
-use iron::prelude::*;
+use actix_web::{HttpRequest, Result};
+use actix_web::middleware::{Middleware, Started};
 
 #[derive(Clone)]
 pub struct GetSaltMiddleware {
@@ -18,29 +17,19 @@ impl GetSaltMiddleware {
     }
 }
 
-pub struct Value(String);
-
-impl typemap::Key for GetSaltMiddleware { type Value = Value; }
-
-impl BeforeMiddleware for GetSaltMiddleware {
-    fn before(&self, req: &mut Request) -> IronResult<()> {
-        req.extensions.insert::<GetSaltMiddleware>(Value(self.salt.clone()));
-        Ok(())
-    }
-
-    fn catch(&self, _: &mut Request, err: IronError) -> IronResult<()> {
-        Err(err)
+impl<S> Middleware<S> for GetSaltMiddleware {
+    fn start(&self, req: &HttpRequest<S>) -> Result<Started> {
+        req.extensions_mut().insert::<GetSaltMiddleware>(self.clone());
+        Ok(Started::Done)
     }
 }
 
 pub trait GetSaltReqExt {
-    fn get_salt(&self) -> &String;
+    fn get_salt(&self) -> String;
 }
 
-impl <'a, 'b>GetSaltReqExt for Request <'a, 'b> {
-    fn get_salt(&self) -> &String {
-        let &Value(ref salt) = self.extensions.get::<GetSaltMiddleware>().unwrap();
-
-        salt
+impl GetSaltReqExt for HttpRequest {
+    fn get_salt(&self) -> String {
+        self.extensions().get::<GetSaltMiddleware>().unwrap().salt.clone()
     }
 }

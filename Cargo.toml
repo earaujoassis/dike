@@ -22,15 +22,7 @@ slog = "^2.4.1"
 slog-term = "^2.4.0"
 slog-json = "^2.2.0"
 base64 = "^0.10.0"
-
-[dependencies.iron]
-version = "*"
-
-[dependencies.mount]
-git = "https://github.com/iron/mount.git"
-
-[dependencies.bodyparser]
-git = "https://github.com/iron/body-parser.git"
+actix-web = "0.7"
 
 [[bin]]
 name = "knock"

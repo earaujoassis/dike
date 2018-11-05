@@ -1,9 +1,8 @@
 #![feature(rustc_private)]
+#![allow(proc_macro_derive_resolution_fallback)]
+#![allow(dead_code)]
 
-extern crate iron;
-#[macro_use]
-extern crate router;
-extern crate mount;
+extern crate actix_web;
 #[macro_use]
 extern crate diesel;
 extern crate r2d2;
@@ -26,19 +25,50 @@ extern crate base64;
 mod utils;
 mod datastore;
 mod controllers;
-mod http_adaptor;
 mod middlewares;
 
 use dotenv::dotenv;
-use http_adaptor::HttpAdaptor;
+use actix_web::{server, App};
+
+use controllers::power_dns as PowerDNSController;
+use controllers::services as ServicesController;
+
 use utils::logger_factory;
 use utils::pool_factory;
+#[allow(unused_imports)]
+use middlewares::GetSaltMiddleware;
+use middlewares::DieselMiddleware;
+use middlewares::LoggerMiddleware;
 
 fn main() {
     dotenv().ok();
 
     let logger = logger_factory();
     let pool = pool_factory(&logger);
-    let http_server = HttpAdaptor::new(&logger, &pool);
-    http_server.start_http("localhost", "3000");
+    let address = format!("{}:{}", "localhost", "3000");
+
+    {
+        info!(logger, "Server Running"; o!("address" => address.clone()));
+    }
+
+    let server = server::new(move || {
+        vec![
+            App::new()
+                .prefix("/dns")
+                .middleware(LoggerMiddleware::new(&logger))
+                .middleware(DieselMiddleware::new(&logger, &pool))
+                .resource("/adddomainkey/:domain/:domain_id", |r| r.f(PowerDNSController::dns_add_domain_key))
+                .resource("/getdomainkeys/:domain/:domain_id", |r| r.f(PowerDNSController::dns_get_domain_keys))
+                .resource("/lookup/:domain/:qtype", |r| r.f(PowerDNSController::dns_lookup))
+                .resource("/list/:domain_id/:domain", |r| r.f(PowerDNSController::dns_list)),
+            App::new()
+                .middleware(LoggerMiddleware::new(&logger))
+                .middleware(DieselMiddleware::new(&logger, &pool))
+                .resource("/", |r| r.f(ServicesController::index))
+                .resource("/ping", |r| r.f(ServicesController::ping))
+                .resource("/clients", |r| r.f(ServicesController::clients))
+        ]
+    });
+
+    server.bind("localhost:3000").unwrap().run();
 }

@@ -1,18 +1,14 @@
 use slog::Logger;
-
-use iron::{typemap, BeforeMiddleware};
-use iron::prelude::*;
+use actix_web::{HttpRequest, Result};
+use actix_web::middleware::{Middleware, Started};
 
 use utils::pool::DieselPool;
 use utils::pool::DieselConnection;
 
+#[derive(Clone)]
 pub struct DieselMiddleware {
     pool: DieselPool
 }
-
-pub struct Value(DieselPool);
-
-impl typemap::Key for DieselMiddleware { type Value = Value; }
 
 impl DieselMiddleware {
     pub fn new (_: &Logger, pool: &DieselPool) -> DieselMiddleware {
@@ -20,10 +16,10 @@ impl DieselMiddleware {
     }
 }
 
-impl BeforeMiddleware for DieselMiddleware {
-    fn before(&self, req: &mut Request) -> IronResult<()> {
-        req.extensions.insert::<DieselMiddleware>(Value(self.pool.clone()));
-        Ok(())
+impl<S> Middleware<S> for DieselMiddleware {
+    fn start(&self, req: &HttpRequest<S>) -> Result<Started> {
+        req.extensions_mut().insert::<DieselPool>(self.pool.clone());
+        Ok(Started::Done)
     }
 }
 
@@ -31,10 +27,11 @@ pub trait DieselReqExt {
     fn get_db_conn(&self) -> DieselConnection;
 }
 
-impl <'a, 'b>DieselReqExt for Request <'a, 'b> {
+impl DieselReqExt for HttpRequest {
     fn get_db_conn(&self) -> DieselConnection {
-        let &Value(ref pool) = self.extensions.get::<DieselMiddleware>().unwrap();
-
-        return pool.get().expect("Failed to get a database connection");
+        self.extensions().get::<DieselPool>()
+            .unwrap()
+            .get()
+            .expect("Failed to get a database connection")
     }
 }

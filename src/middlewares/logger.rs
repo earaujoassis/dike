@@ -1,8 +1,8 @@
 use slog::*;
+use actix_web::{HttpRequest, Result};
+use actix_web::middleware::{Middleware, Started};
 
-use iron::{typemap, BeforeMiddleware};
-use iron::prelude::*;
-
+#[derive(Clone)]
 pub struct LoggerMiddleware {
     pub logger: Logger
 }
@@ -13,20 +13,12 @@ impl LoggerMiddleware {
     }
 }
 
-pub struct Value(Logger);
-
-impl typemap::Key for LoggerMiddleware { type Value = Value; }
-
-impl BeforeMiddleware for LoggerMiddleware {
-    fn before(&self, req: &mut Request) -> IronResult<()> {
-        let logger = self.logger.new(o!("route" => format!("{}", req.url), "method" => format!("{}", req.method)));
+impl<S> Middleware<S> for LoggerMiddleware {
+    fn start(&self, req: &HttpRequest<S>) -> Result<Started> {
+        let logger = self.logger.new(o!("path" => format!("{}", req.path()), "method" => format!("{}", req.method())));
         info!(logger, "Path reached");
-        req.extensions.insert::<LoggerMiddleware>(Value(logger));
-        Ok(())
-    }
-
-    fn catch(&self, _: &mut Request, err: IronError) -> IronResult<()> {
-        Err(err)
+        req.extensions_mut().insert::<Logger>(logger);
+        Ok(Started::Done)
     }
 }
 
@@ -34,10 +26,8 @@ pub trait LoggerReqExt {
     fn get_logger(&self) -> Logger;
 }
 
-impl <'a, 'b>LoggerReqExt for Request <'a, 'b> {
+impl LoggerReqExt for HttpRequest {
     fn get_logger(&self) -> Logger {
-        let &Value(ref logger) = self.extensions.get::<LoggerMiddleware>().unwrap();
-
-        logger.clone()
+        self.extensions().get::<Logger>().unwrap().clone()
     }
 }
