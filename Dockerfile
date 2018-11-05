@@ -17,4 +17,4 @@ RUN cargo install diesel_cli --no-default-features --features mysql
 RUN cargo install --path .
 
 EXPOSE 80
-CMD ./scripts/wait-for-datastore.sh datastore && ./scripts/start-knocking.sh
+CMD ./scripts/container.sh

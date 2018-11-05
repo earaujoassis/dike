@@ -4,5 +4,6 @@
 **/*.rs.bk
 *.env*
 !.env.sample
+!.env.testing
 *Rocket.toml*
 !Rocket.toml.sample
