@@ -1,4 +1,4 @@
-extern crate knock;
+extern crate dike;
 
 #[cfg(test)]
 mod tests {

@@ -1,4 +1,4 @@
-extern crate knock;
+extern crate dike;
 extern crate dotenv;
 extern crate actix_web;
 extern crate diesel;
@@ -11,9 +11,9 @@ pub fn test_helper() -> TestServer {
     dotenv::from_filename(".env.testing").ok();
     embed_migrations!("migrations");
 
-    let logger = knock::utils::logger_factory();
-    let pool = knock::utils::pool_factory(&logger);
-    let server = TestServer::with_factory(move || { knock::utils::define_endpoints(&logger, &pool) });
+    let logger = dike::utils::logger_factory();
+    let pool = dike::utils::pool_factory(&logger);
+    let server = TestServer::with_factory(move || { dike::utils::define_endpoints(&logger, &pool) });
 
     server
 }

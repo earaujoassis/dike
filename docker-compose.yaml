@@ -1,32 +1,32 @@
 version: '3.4'
 services:
-  knock-mariadb:
+  dike-mariadb:
     image: 'mariadb:10.3'
-    container_name: knock-mariadb
-    hostname: knock-mariadb
+    container_name: dike-mariadb
+    hostname: dike-mariadb
     ports:
         - "3306:3306"
     volumes:
-      - knock-mariadb-data:/var/lib/mysql
+      - dike-mariadb-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=aqivMN1WqCjIORXI
-      - MYSQL_DATABASE=knock_development
-      - MYSQL_USER=knock-mariadb
+      - MYSQL_DATABASE=dike_development
+      - MYSQL_USER=dike-mariadb
       - MYSQL_PASSWORD=9GFRsVIr5L7ORVPy
 
-  knock-knock:
+  dike:
     build:
       context: .
       args:
         ROCKET_ENV: development
         ENV: development
-    image: knock-knock
-    container_name: knock-knock
+    image: dike
+    container_name: dike
     ports:
       - "8000:80"
     env_file: .env
     depends_on:
-      - knock-mariadb
+      - dike-mariadb
 
 volumes:
-  knock-mariadb-data:
+  dike-mariadb-data:

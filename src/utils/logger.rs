@@ -7,7 +7,7 @@ use slog_term;
 use slog_json::Json;
 
 pub fn logger_factory() -> Logger {
-    let log_output_type = env::var("KNOCK_LOG_OUTPUT").expect("KNOCK_LOG_OUTPUT must be set");
+    let log_output_type = env::var("DIKE_LOG_OUTPUT").expect("DIKE_LOG_OUTPUT must be set");
 
     match log_output_type.as_ref() {
         "json" => {
@@ -15,7 +15,7 @@ pub fn logger_factory() -> Logger {
 
             Logger::root(
                 json,
-                o!("app" => "knock-knock")
+                o!("app" => "dike")
             )
         },
         _ => {
@@ -24,7 +24,7 @@ pub fn logger_factory() -> Logger {
 
             Logger::root(
                 drain,
-                o!("app" => "knock-knock")
+                o!("app" => "dike")
             )
         }
     }

@@ -1,9 +1,9 @@
 [package]
-name = "knock"
+name = "dike"
 version = "0.1.0"
 authors = ["Ewerton Carlos Assis <earaujoassis@gmail.com>"]
-description = "Knock-knock is a really tiny dynamic DNS (DDNS) client"
-repository = "https://github.com/earaujoassis/knock-knock"
+description = "Dike server is a really tiny dynamic DNS (DDNS) client"
+repository = "https://github.com/earaujoassis/dike-server"
 readme = "README.md"
 categories = ["network-programming", "DDNS"]
 license = "MIT"
@@ -27,5 +27,5 @@ base64 = "^0.10.0"
 actix-web = "0.7"
 
 [[bin]]
-name = "knock"
+name = "dike"
 path = "src/main.rs"

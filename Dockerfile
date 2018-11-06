@@ -10,7 +10,7 @@ ENV ENV=$ENV
 RUN apt-get update
 RUN apt-get install -y mysql-client
 
-WORKDIR /usr/src/knock_knock
+WORKDIR /usr/src/dike
 COPY . .
 
 RUN cargo install diesel_cli --no-default-features --features mysql

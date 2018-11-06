@@ -11,7 +11,7 @@ pub struct GetSaltMiddleware {
 
 impl GetSaltMiddleware {
     pub fn new (logger: &Logger) -> GetSaltMiddleware {
-        let salt = env::var("KNOCK_PASSWORD_SALT").expect("KNOCK_PASSWORD_SALT must be set");
+        let salt = env::var("DIKE_PASSWORD_SALT").expect("DIKE_PASSWORD_SALT must be set");
 
         GetSaltMiddleware {logger: logger.new(o!("module" => "GetSaltMiddleware")), salt: salt}
     }

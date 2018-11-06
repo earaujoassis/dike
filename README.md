@@ -1,8 +1,8 @@
-# Knock-knock
+# Dike server
 
-> Knock-knock is a really tiny dynamic DNS (DDNS) server
+> Dike server is a really tiny dynamic DNS (DDNS) server
 
-Knock-knock is based on the PowerDNS Remote Backend: it makes available a backend HTTP server
+Dike server is based on the PowerDNS Remote Backend: it makes available a backend HTTP server
 to provide queries answers to the DNS server; and a HTTP server to attend dynamic DNS (DDNS) clients.
 It uses the [Actix web framework](https://actix.rs/) + [Diesel ORM](http://diesel.rs/) for
 the Rust language.
@@ -30,7 +30,7 @@ $ docker-compose up
 
 ## Issues
 
-Please take a look at [/issues](https://github.com/earaujoassis/knock-knock/issues)
+Please take a look at [/issues](https://github.com/earaujoassis/dike-server/issues)
 
 ## License
 
