@@ -22,23 +22,17 @@ extern crate rustc_serialize;
 extern crate base64;
 
 #[macro_use]
-mod utils;
-mod datastore;
-mod controllers;
-mod middlewares;
+pub mod utils;
+pub mod datastore;
+pub mod controllers;
+pub mod middlewares;
 
 use dotenv::dotenv;
-use actix_web::{server, App};
-
-use controllers::power_dns as PowerDNSController;
-use controllers::services as ServicesController;
+use actix_web::server;
 
 use utils::logger_factory;
 use utils::pool_factory;
-#[allow(unused_imports)]
-use middlewares::GetSaltMiddleware;
-use middlewares::DieselMiddleware;
-use middlewares::LoggerMiddleware;
+use utils::define_endpoints;
 
 fn main() {
     dotenv().ok();
@@ -52,22 +46,7 @@ fn main() {
     }
 
     let server = server::new(move || {
-        vec![
-            App::new()
-                .prefix("/dns")
-                .middleware(LoggerMiddleware::new(&logger))
-                .middleware(DieselMiddleware::new(&logger, &pool))
-                .resource("/adddomainkey/:domain/:domain_id", |r| r.f(PowerDNSController::dns_add_domain_key))
-                .resource("/getdomainkeys/:domain/:domain_id", |r| r.f(PowerDNSController::dns_get_domain_keys))
-                .resource("/lookup/:domain/:qtype", |r| r.f(PowerDNSController::dns_lookup))
-                .resource("/list/:domain_id/:domain", |r| r.f(PowerDNSController::dns_list)),
-            App::new()
-                .middleware(LoggerMiddleware::new(&logger))
-                .middleware(DieselMiddleware::new(&logger, &pool))
-                .resource("/", |r| r.f(ServicesController::index))
-                .resource("/ping", |r| r.f(ServicesController::ping))
-                .resource("/clients", |r| r.f(ServicesController::clients))
-        ]
+        define_endpoints(&logger, &pool)
     });
 
     server.bind("localhost:3000").unwrap().run();

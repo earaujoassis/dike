@@ -9,7 +9,7 @@ table! {
 }
 
 table! {
-    updates (client_id) {
+    updates (id) {
         update_timestamp -> Timestamp,
         id -> Unsigned<Bigint>,
         client_id -> Unsigned<Bigint>,

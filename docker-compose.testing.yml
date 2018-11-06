@@ -1,0 +1,32 @@
+version: '3.4'
+services:
+  knock-mariadb-testing:
+    image: 'mariadb:10.3'
+    container_name: knock-mariadb-testing
+    hostname: knock-mariadb-testing
+    ports:
+        - "3306:3306"
+    volumes:
+      - knock-mariadb-testing-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=5322ZFCkIQnBUy9e
+      - MYSQL_DATABASE=knock_testing
+      - MYSQL_USER=knock-mariadb
+      - MYSQL_PASSWORD=58ELtzFCyZWiL14u
+
+  knock-knock-testing:
+    build:
+      context: .
+      args:
+        ROCKET_ENV: testing
+        ENV: testing
+    image: knock-knock-testing
+    container_name: knock-knock-testing
+    ports:
+      - "8000:80"
+    env_file: .env.testing
+    depends_on:
+      - knock-mariadb-testing
+
+volumes:
+  knock-mariadb-testing-data:
