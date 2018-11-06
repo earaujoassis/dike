@@ -4,14 +4,14 @@
 
 Knock-knock is based on the PowerDNS Remote Backend: it makes available a backend HTTP server
 to provide queries answers to the DNS server; and a HTTP server to attend dynamic DNS (DDNS) clients.
-It uses the Rocket web framework + Diesel ORM for the Rust language.
+It uses the [Actix web framework](https://actix.rs/) + [Diesel ORM](http://diesel.rs/) for
+the Rust language.
 
 ## Setup & Running
 
-Rocket requires the nightly builds for Cargo. You should check Rocket's documentation in order to
-setup its current environment. You also must create a `.env` and `Rocket.toml` files, according to
-each `.sample` for them (`.env.sample` and `Rocket.toml.sample` files, respectively). After installing
-Rust and setting up Cargo, you may run:
+Actix requires the nightly builds for Rust. A `.env` file must be created, according to the `.env.sample`.
+After installing Rust and setting up Cargo, the following commands will (1) install the `diesel_cli` binary;
+(2) migrate migrations; and (3) compile the application and run it:
 
 ```sh
 $ cargo install diesel_cli --no-default-features --features mysql
@@ -19,7 +19,7 @@ $ diesel migration run --database-url=?
 $ cargo run
 ```
 
-It will compile the binary and run it. The HTTP server's address will be printed in the console.
+The HTTP server's address will be printed in the console.
 
 Another possibility is using `docker-compose` to start all services (including database):
 
