@@ -29,12 +29,18 @@ subparsers.add_parser("host", help="extract hostname")
 subparsers.add_parser("port", help="extract port")
 
 
+def format_value(value):
+    if value is None:
+        return ""
+    return value
+
+
 def username(url_parsed):
-    sys.stdout.write("{0}".format(url_parsed.username))
+    sys.stdout.write("{0}".format(format_value(url_parsed.username)))
 
 
 def password(url_parsed):
-    sys.stdout.write("{0}".format(url_parsed.password))
+    sys.stdout.write("{0}".format(format_value(url_parsed.password)))
 
 
 def hostname(url_parsed):
@@ -42,7 +48,7 @@ def hostname(url_parsed):
 
 
 def port(url_parsed):
-    sys.stdout.write("{0}".format(url_parsed.port))
+    sys.stdout.write("{0}".format(format_value(url_parsed.port)))
 
 
 def main(argv):
