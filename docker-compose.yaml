@@ -10,7 +10,6 @@ services:
       - dike-mariadb-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=aqivMN1WqCjIORXI
-      - MYSQL_DATABASE=dike_development
       - MYSQL_USER=dike-mariadb
       - MYSQL_PASSWORD=9GFRsVIr5L7ORVPy
 

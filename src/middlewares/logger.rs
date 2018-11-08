@@ -22,12 +22,12 @@ impl<S> Middleware<S> for LoggerMiddleware {
     }
 }
 
-pub trait LoggerReqExt {
-    fn get_logger(&self) -> Logger;
+pub trait RequestLogger {
+    fn logger(&self) -> Logger;
 }
 
-impl LoggerReqExt for HttpRequest {
-    fn get_logger(&self) -> Logger {
+impl RequestLogger for HttpRequest {
+    fn logger(&self) -> Logger {
         self.extensions().get::<Logger>().unwrap().clone()
     }
 }

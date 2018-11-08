@@ -49,5 +49,5 @@ fn main() {
         define_endpoints(&logger, &pool)
     });
 
-    server.bind("localhost:3000").unwrap().run();
+    server.bind(address).unwrap().run();
 }

@@ -23,12 +23,12 @@ impl<S> Middleware<S> for DieselMiddleware {
     }
 }
 
-pub trait DieselReqExt {
-    fn get_db_conn(&self) -> DieselConnection;
+pub trait RequestDiesel {
+    fn datastore(&self) -> DieselConnection;
 }
 
-impl DieselReqExt for HttpRequest {
-    fn get_db_conn(&self) -> DieselConnection {
+impl RequestDiesel for HttpRequest {
+    fn datastore(&self) -> DieselConnection {
         self.extensions().get::<DieselPool>()
             .unwrap()
             .get()

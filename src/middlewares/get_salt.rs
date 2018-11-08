@@ -24,12 +24,12 @@ impl<S> Middleware<S> for GetSaltMiddleware {
     }
 }
 
-pub trait GetSaltReqExt {
-    fn get_salt(&self) -> String;
+pub trait RequestSalt {
+    fn salt(&self) -> String;
 }
 
-impl GetSaltReqExt for HttpRequest {
-    fn get_salt(&self) -> String {
+impl RequestSalt for HttpRequest {
+    fn salt(&self) -> String {
         self.extensions().get::<GetSaltMiddleware>().unwrap().salt.clone()
     }
 }

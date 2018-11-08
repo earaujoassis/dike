@@ -19,9 +19,11 @@ macro_rules! import_controller_generic_requeriments {
         use actix_web::http::StatusCode;
 
         #[allow(unused_imports)]
-        use middlewares::DieselReqExt;
+        use middlewares::RequestDiesel;
         #[allow(unused_imports)]
-        use middlewares::LoggerReqExt;
+        use middlewares::RequestLogger;
+        #[allow(unused_imports)]
+        use middlewares::RequestSalt;
         #[allow(unused_imports)]
         use datastore::*;
         #[allow(unused_imports)]
