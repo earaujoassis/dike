@@ -1,4 +1,4 @@
-# Dike server
+# Dike server [![Build Status](https://travis-ci.com/earaujoassis/dike-server.svg?branch=master)](https://travis-ci.com/earaujoassis/dike-server)
 
 > Dike server is a really tiny dynamic DNS (DDNS) server
 
