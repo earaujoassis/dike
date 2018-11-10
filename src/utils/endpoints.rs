@@ -1,5 +1,5 @@
 use std::vec::Vec;
-use actix_web::App;
+use actix_web::{http::Method, App};
 use slog::Logger;
 
 use controllers::power_dns as PowerDNSController;
@@ -17,15 +17,20 @@ pub fn define_endpoints(logger: &Logger, pool: &DieselPool) -> Vec<App> {
             .prefix("/dns")
             .middleware(LoggerMiddleware::new(&logger))
             .middleware(DieselMiddleware::new(&logger, &pool))
-            .resource("/adddomainkey/:domain/:domain_id", |r| r.f(PowerDNSController::dns_add_domain_key))
-            .resource("/getdomainkeys/:domain/:domain_id", |r| r.f(PowerDNSController::dns_get_domain_keys))
-            .resource("/lookup/:domain/:qtype", |r| r.f(PowerDNSController::dns_lookup))
-            .resource("/list/:domain_id/:domain", |r| r.f(PowerDNSController::dns_list)),
+            .resource("/adddomainkey/:domain/:domain_id", |r| r.method(Method::GET).f(PowerDNSController::dns_add_domain_key))
+            .resource("/getdomainkeys/:domain/:domain_id", |r| r.method(Method::GET).f(PowerDNSController::dns_get_domain_keys))
+            .resource("/lookup/:domain/:qtype", |r| r.method(Method::GET).f(PowerDNSController::dns_lookup))
+            .resource("/list/:domain_id/:domain", |r| r.method(Method::GET).f(PowerDNSController::dns_list)),
+        App::new()
+            .prefix("/clients")
+            .middleware(LoggerMiddleware::new(&logger))
+            .middleware(DieselMiddleware::new(&logger, &pool))
+            .resource("/update", |r| r.method(Method::POST).f(ServicesController::clients_update))
+            .resource("/active", |r| r.method(Method::GET).f(ServicesController::clients_active)),
         App::new()
             .middleware(LoggerMiddleware::new(&logger))
             .middleware(DieselMiddleware::new(&logger, &pool))
-            .resource("/", |r| r.f(ServicesController::index))
-            .resource("/ping", |r| r.f(ServicesController::ping))
-            .resource("/clients", |r| r.f(ServicesController::clients))
+            .resource("/", |r| r.method(Method::GET).f(ServicesController::index))
+            .resource("/ping", |r| r.method(Method::GET).f(ServicesController::ping))
     ]
 }

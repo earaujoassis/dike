@@ -3,13 +3,16 @@
 
 set -e
 
-export $(grep -v '^#' .env | xargs)
-until echo "\q" | mysql --host=$(sed -E -e "s_.*://([^/@]*@)?([^/:]+).*_\2_" <<< "$DIKE_DATABASE_URL") -P "3306" -u "root" --password="root"; do
-  >&2 echo "Datastore is unavailable; sleeping"
-  sleep 1
-done
+if [ -e .env ]; then export $(grep -v '^#' .env | xargs) ; fi
 
->&2 echo "Datastore is up; executing command"
+if ! [ -x "$(command -v diesel)" ]; then
+  echo "> Installing diesel_cli from 'cargo'"
+  cargo install diesel_cli --no-default-features --features mysql ;
+fi
 
-diesel migration run --database-url=$DIKE_DATABASE_URL
+sh scripts/datastore.sh
+
+echo "> Executing any new migration"
+diesel migration run --database-url="${DIKE_DATABASE_URL}${DIKE_DATABASE_NAME_PREFIX}_${DIKE_ENV}"
+echo "> Starting server"
 cargo run

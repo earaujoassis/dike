@@ -1,0 +1,35 @@
+language: rust
+rust:
+  - nightly
+addons:
+  apt:
+    packages:
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - cmake
+      - gcc
+      - binutils-dev
+      - libiberty-dev
+env:
+  global:
+    - DIKE_ENV=testing
+    - DIKE_DATABASE_URL="mysql://travis@127.0.0.1:3306/"
+    - DIKE_DATABASE_NAME_PREFIX=dike
+    - DIKE_LOG_OUTPUT=stdout
+    - DIKE_PASSWORD_SALT=ExuUiWkWwhXqgTUEzkSaSQIaVDRPHREH
+services:
+  - mysql
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS dike_testing;'
+install:
+#  - cargo install cargo-kcov
+#  - cargo kcov --print-install-kcov-sh | sh
+  - cargo install diesel_cli --no-default-features --features mysql
+  - cargo build --verbose
+script:
+  - scripts/test.sh
+#after_success: |
+#  cargo kcov
+#  bash <(curl -s https://codecov.io/bash) &&
+#  echo "Uploaded code coverage"
