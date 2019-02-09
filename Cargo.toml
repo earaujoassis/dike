@@ -25,6 +25,7 @@ slog-term = "^2.4.0"
 slog-json = "^2.2.0"
 base64 = "^0.10.0"
 actix-web = "0.7"
+reqwest = "0.9.9"
 
 [[bin]]
 name = "dike"

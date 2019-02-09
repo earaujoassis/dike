@@ -1,8 +1,8 @@
-#![feature(rustc_private)]
 #![allow(proc_macro_derive_resolution_fallback)]
 #![allow(dead_code)]
 
 extern crate actix_web;
+extern crate reqwest;
 #[macro_use]
 extern crate diesel;
 extern crate r2d2;
@@ -18,7 +18,6 @@ extern crate serde_json;
 extern crate slog;
 extern crate slog_term;
 extern crate slog_json;
-extern crate rustc_serialize;
 extern crate base64;
 
 #[macro_use]

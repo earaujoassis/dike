@@ -3,6 +3,7 @@ pub mod macros;
 pub mod logger;
 pub mod pool;
 pub mod endpoints;
+pub mod power_dns_api;
 
 pub use self::logger::logger_factory;
 pub use self::pool::DieselConnection;
