@@ -7,6 +7,8 @@ to provide queries answers to the DNS server; and a HTTP server to attend dynami
 It uses the [Actix web framework](https://actix.rs/) + [Diesel ORM](http://diesel.rs/) for
 the Rust language. Notice: the Actix web framework requires the nightly builds for Rust.
 
+It doesn't follow any of the officials DynDNS Protocols but it is inspired by them.
+
 ## Setup & Running
 
 The current application uses MariaDB as the backend database. For development purposes, it is possible
