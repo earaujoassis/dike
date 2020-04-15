@@ -5,7 +5,9 @@
 Dike server is based on the PowerDNS Remote Backend: it makes available a backend HTTP server
 to provide queries answers to the DNS server; and a HTTP server to attend dynamic DNS (DDNS) clients.
 It uses the [Actix web framework](https://actix.rs/) + [Diesel ORM](http://diesel.rs/) for
-the Rust language. Notice: the Actix web framework requires the nightly builds for Rust.
+the Rust language.
+
+It doesn't follow any of the officials DynDNS Protocols but it is inspired by them.
 
 ## Setup & Running
 
