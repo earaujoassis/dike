@@ -1,0 +1,10 @@
+.DS_Store
+
+__pycache__
+.pytest_cache
+.coverage
+venv/
+*.py[cod]
+*$py.class
+*.env*
+!.env.sample

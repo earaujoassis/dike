@@ -1,5 +1,4 @@
 FROM rust:1.30.0
-MAINTAINER Ewerton Carlos Assis <earaujoassis@gmail.com>
 
 ARG ROCKET_ENV=production
 ARG ENV=production
