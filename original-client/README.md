@@ -1,4 +1,4 @@
-# Dike client [![Build Status](https://travis-ci.com/earaujoassis/dike-client.svg?branch=master)](https://travis-ci.com/earaujoassis/dike-client) [![codecov](https://codecov.io/gh/earaujoassis/dike-client/branch/master/graph/badge.svg)](https://codecov.io/gh/earaujoassis/dike-client)
+# Dike original client
 
 > Dike client is a really tiny system to provide a dynamic DNS (DDNS) service
 
